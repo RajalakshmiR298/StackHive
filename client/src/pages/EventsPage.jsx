@@ -99,7 +99,7 @@ const EventsPage = () => {
     setLoading(true);
     setError(false);
     try {
-      const userId = user?._id || user?.id || '6a40d67668deba9438988b89';
+      const userId = user?._id || user?.id || '6a415ffae52b1d8e68b57839';
       const data = await getNearbyEvents(userId);
       setEvents(data);
     } catch (err) {

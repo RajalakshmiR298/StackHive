@@ -76,6 +76,8 @@ const getEventsByCategory = async (req, res) => {
 const getNearbyEvents = async (req, res) => {
   try {
     const { userId } = req.params;
+
+
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(404).json({ message: 'User not found' });
     }
