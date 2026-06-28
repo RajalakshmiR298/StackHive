@@ -8,6 +8,8 @@ import Profile from './pages/Profile';
 import Events from './pages/Events';
 import Favorites from './pages/Favorites';
 import Connections from './pages/Connections';
+import ProfileSetup from "./pages/ProfileSetup";
+import EditProfile from "./pages/EditProfile";
 import './App.css';
 
 function App() {
@@ -20,7 +22,9 @@ function App() {
             <Route path="events" element={<Events />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="profile/setup" element={<ProfileSetup />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="profile/edit" element={<EditProfile />} />
             <Route path="favorites" element={<Favorites />} />
             <Route path="connections" element={<Connections />} />
           </Route>

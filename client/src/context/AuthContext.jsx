@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from "react";
+import api from "../services/api";
 
 export const AuthContext = createContext();
 
@@ -6,43 +7,81 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Load user when app starts
   useEffect(() => {
-    // Check if user is logged in on initial load
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
+
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
-    // Placeholder login behavior
-    console.log('Login request:', email, password);
-    const mockUser = { email, name: 'Student User' };
-    setUser(mockUser);
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    localStorage.setItem('token', 'mock-jwt-token');
-    return mockUser;
-  };
-
+  // Register
   const register = async (name, email, password) => {
-    // Placeholder register behavior
-    console.log('Register request:', name, email, password);
-    const mockUser = { email, name };
-    setUser(mockUser);
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    localStorage.setItem('token', 'mock-jwt-token');
-    return mockUser;
+    const response = await api.post("/auth/register", {
+      name,
+      email,
+      password,
+    });
+
+    const data = response.data;
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data));
+
+    setUser(data);
+
+    return data;
   };
 
+  // Login
+  const login = async (email, password) => {
+    const response = await api.post("/auth/login", {
+      email,
+      password,
+    });
+
+    const data = response.data;
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data));
+
+    setUser(data);
+
+    return data;
+  };
+
+  // Logout
   const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
     setUser(null);
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+  };
+
+  // Refresh profile from backend
+  const fetchProfile = async () => {
+    const response = await api.get("/auth/profile");
+
+    setUser(response.data);
+    localStorage.setItem("user", JSON.stringify(response.data));
+
+    return response.data;
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        register,
+        logout,
+        fetchProfile,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
