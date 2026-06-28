@@ -5,7 +5,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import Events from './pages/Events';
+import EventsPage from './pages/EventsPage';
+import EventDetails from './pages/EventDetails';
 import Favorites from './pages/Favorites';
 import Connections from './pages/Connections';
 import './App.css';
@@ -17,7 +18,8 @@ function App() {
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
-            <Route path="events" element={<Events />} />
+            <Route path="events" element={<EventsPage />} />
+            <Route path="events/:id" element={<EventDetails />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="profile" element={<Profile />} />

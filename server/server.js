@@ -4,6 +4,7 @@ const app = require('./app');
 
 // Load environment variables
 dotenv.config();
+console.log("MONGO_URI =", process.env.MONGO_URI);
 
 // Connect to Database
 connectDB();
