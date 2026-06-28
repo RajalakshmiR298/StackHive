@@ -1,15 +1,18 @@
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const app = require('./app');
+const dotenv = require("dotenv");
 
-// Load environment variables
+// Load .env first
 dotenv.config();
 
-// Connect to Database
+const connectDB = require("./config/db");
+const app = require("./app");
+
+// Connect to database
 connectDB();
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  console.log(
+    `Server running in ${process.env.NODE_ENV || "development"} mode on port ${PORT}`
+  );
 });
