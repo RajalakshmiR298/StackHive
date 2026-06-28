@@ -59,7 +59,41 @@ const sendConnectionRequest = async (req, res, next) => {
 // @access  Private
 const acceptConnectionRequest = async (req, res, next) => {
   try {
-    res.status(200).json({ message: 'Accept connection request placeholder' });
+    const { requestId } = req.params;
+
+    const request = await ConnectionRequest.findById(requestId);
+
+    if (!request) {
+      return res.status(404).json({
+        message: "Connection request not found.",
+      });
+    }
+
+    if (request.receiver.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message: "You are not allowed to accept this request.",
+      });
+    }
+
+    request.status = "accepted";
+    await request.save();
+
+    await User.findByIdAndUpdate(request.sender, {
+      $addToSet: {
+        connections: request.receiver,
+      },
+    });
+
+    await User.findByIdAndUpdate(request.receiver, {
+      $addToSet: {
+        connections: request.sender,
+      },
+    });
+
+    res.status(200).json({
+      message: "Connection request accepted successfully.",
+    });
+
   } catch (error) {
     next(error);
   }
@@ -70,7 +104,30 @@ const acceptConnectionRequest = async (req, res, next) => {
 // @access  Private
 const rejectConnectionRequest = async (req, res, next) => {
   try {
-    res.status(200).json({ message: 'Reject connection request placeholder' });
+    const { requestId } = req.params;
+
+    const request = await ConnectionRequest.findById(requestId);
+
+    if (!request) {
+      return res.status(404).json({
+        message: "Connection request not found.",
+      });
+    }
+
+    // Only the receiver can reject
+    if (request.receiver.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message: "You are not allowed to reject this request.",
+      });
+    }
+
+    request.status = "rejected";
+    await request.save();
+
+    res.status(200).json({
+      message: "Connection request rejected successfully.",
+    });
+
   } catch (error) {
     next(error);
   }
@@ -81,7 +138,14 @@ const rejectConnectionRequest = async (req, res, next) => {
 // @access  Private
 const getConnections = async (req, res, next) => {
   try {
-    res.status(200).json({ message: 'Get user connections placeholder' });
+    const user = await User.findById(req.user._id)
+      .populate(
+        "connections",
+        "name email location skills interests hobbies profileImage"
+      );
+
+    res.status(200).json(user.connections);
+
   } catch (error) {
     next(error);
   }
@@ -92,7 +156,16 @@ const getConnections = async (req, res, next) => {
 // @access  Private
 const getConnectionRequests = async (req, res, next) => {
   try {
-    res.status(200).json({ message: 'Get connection requests placeholder' });
+    const requests = await ConnectionRequest.find({
+      receiver: req.user._id,
+      status: "pending",
+    }).populate(
+      "sender",
+      "name email location skills interests hobbies profileImage"
+    );
+
+    res.status(200).json(requests);
+
   } catch (error) {
     next(error);
   }
@@ -110,6 +183,13 @@ const getMatches = async (req, res, next) => {
 
     // Calculate match percentage
     const matches = matchProfiles(currentUser, users);
+
+    const filtered = matches.filter(
+    user =>
+        !currentUser.connections.includes(user._id)
+);
+
+res.json(filtered);
 
     res.status(200).json(matches);
 

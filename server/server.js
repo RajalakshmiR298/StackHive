@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 // Load .env first
 dotenv.config();
 
+console.log("MONGO_URI:", process.env.MONGO_URI);
+
 const connectDB = require("./config/db");
 const app = require("./app");
 
