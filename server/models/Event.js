@@ -15,6 +15,9 @@ Event Schema definition will include:
 const eventSchema = new mongoose.Schema(
   {
     // Schema properties will be defined here
+    title: String,
+    image: String,
+    description: String,
   },
   {
     timestamps: true,

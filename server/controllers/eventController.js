@@ -1,11 +1,12 @@
 // Event Controller Placeholders
-
+const Event = require("../models/Event");
 // @desc    Get all events
 // @route   GET /api/events
 // @access  Public
 const getEvents = async (req, res, next) => {
   try {
-    res.status(200).json({ message: 'Get all events placeholder' });
+    const events = await Event.find();
+    res.status(200).json(events);
   } catch (error) {
     next(error);
   }

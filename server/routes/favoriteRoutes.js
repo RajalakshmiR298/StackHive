@@ -9,8 +9,7 @@ const { protect } = require('../middleware/authMiddleware');
 
 router.use(protect);
 
-router.route('/')
-  .get(getFavoriteEvents);
+router.get("/", getFavoriteEvents);
 
 router.route('/:eventId')
   .post(addFavoriteEvent)

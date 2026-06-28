@@ -1,35 +1,54 @@
-// Favorite Controller Placeholders
+const Favorite = require("../models/Favorite");
 
-// @desc    Get user's favorite events
-// @route   GET /api/favorites
-// @access  Private
-const getFavoriteEvents = async (req, res, next) => {
+// GET favorites
+const getFavoriteEvents = async (req, res) => {
   try {
-    res.status(200).json({ message: "Get user's favorite events placeholder" });
+    const userId = req.user.id;
+
+    const favorites = await Favorite.find({ userId });
+
+    res.json(favorites);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-// @desc    Add event to favorites
-// @route   POST /api/favorites/:eventId
-// @access  Private
-const addFavoriteEvent = async (req, res, next) => {
+// ADD favorite
+const addFavoriteEvent = async (req, res) => {
   try {
-    res.status(200).json({ message: 'Add favorite event placeholder' });
+    const userId = req.user.id;
+    const { eventId, title, image } = req.body;
+
+    const exists = await Favorite.findOne({ userId, eventId });
+
+    if (exists) {
+      return res.status(400).json({ message: "Already in favorites" });
+    }
+
+    const fav = await Favorite.create({
+      userId,
+      eventId,
+      title,
+      image,
+    });
+
+    res.status(201).json(fav);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-// @desc    Remove event from favorites
-// @route   DELETE /api/favorites/:eventId
-// @access  Private
-const removeFavoriteEvent = async (req, res, next) => {
+// REMOVE favorite
+const removeFavoriteEvent = async (req, res) => {
   try {
-    res.status(200).json({ message: 'Remove favorite event placeholder' });
+    const userId = req.user.id;
+    const { eventId } = req.params;
+
+    await Favorite.findOneAndDelete({ userId, eventId });
+
+    res.json({ message: "Removed from favorites" });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
