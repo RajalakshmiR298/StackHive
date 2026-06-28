@@ -1,3 +1,6 @@
+const User = require("../models/User");
+const ConnectionRequest = require("../models/ConnectionRequest");
+const { matchProfiles } = require("../utils/matchingAlgorithm");
 // Connection Controller Placeholders
 
 // @desc    Send a connection request to another student
@@ -5,7 +8,47 @@
 // @access  Private
 const sendConnectionRequest = async (req, res, next) => {
   try {
-    res.status(200).json({ message: 'Send connection request placeholder' });
+    const receiverId = req.body.receiverId;
+
+    // Cannot send request to yourself
+    if (receiverId === req.user._id.toString()) {
+      return res.status(400).json({
+        message: "You cannot send a request to yourself.",
+      });
+    }
+
+    // Check receiver exists
+    const receiver = await User.findById(receiverId);
+
+    if (!receiver) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    // Check if request already exists
+    const existingRequest = await ConnectionRequest.findOne({
+      sender: req.user._id,
+      receiver: receiverId,
+    });
+
+    if (existingRequest) {
+      return res.status(400).json({
+        message: "Connection request already sent.",
+      });
+    }
+
+    // Create request
+    const request = await ConnectionRequest.create({
+      sender: req.user._id,
+      receiver: receiverId,
+    });
+
+    res.status(201).json({
+      message: "Connection request sent successfully.",
+      request,
+    });
+
   } catch (error) {
     next(error);
   }
@@ -55,10 +98,31 @@ const getConnectionRequests = async (req, res, next) => {
   }
 };
 
+const getMatches = async (req, res, next) => {
+  try {
+    // Logged in user
+    const currentUser = await User.findById(req.user._id);
+
+    // Get every user except the logged in user
+    const users = await User.find({
+      _id: { $ne: req.user._id },
+    });
+
+    // Calculate match percentage
+    const matches = matchProfiles(currentUser, users);
+
+    res.status(200).json(matches);
+
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   sendConnectionRequest,
   acceptConnectionRequest,
   rejectConnectionRequest,
   getConnections,
+  getMatches,
   getConnectionRequests,
 };
