@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { X, Plus, Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const TagInput = ({
   label,
@@ -16,10 +18,12 @@ const TagInput = ({
   );
 
   const addTag = (tag) => {
-    if (!tag.trim()) return;
+    const newTag = tag.trim();
 
-    if (!value.includes(tag)) {
-      onChange([...value, tag]);
+    if (!newTag) return;
+
+    if (!value.includes(newTag)) {
+      onChange([...value, newTag]);
     }
 
     setInput("");
@@ -37,130 +41,110 @@ const TagInput = ({
   };
 
   return (
-    <div style={{ marginBottom: "25px" }}>
-      <label
-        style={{
-          color: "#ddd6fe",
-          fontWeight: "600",
-          display: "block",
-          marginBottom: "8px",
-        }}
-      >
+    <div className="space-y-3">
+
+      <label className="block text-sm font-semibold text-slate-300">
+
         {label}
+
       </label>
 
-      <div
-        style={{
-          border: "1px solid rgba(255,255,255,0.15)",
-          borderRadius: "12px",
-          padding: "12px",
-          background: "rgba(255,255,255,0.05)",
-        }}
-      >
+      <div className="rounded-2xl border border-slate-700 bg-slate-950 p-4">
+
         {/* Selected Tags */}
 
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "8px",
-            marginBottom: "10px",
-          }}
-        >
-          {value.map((tag) => (
-            <span
-              key={tag}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "8px 14px",
-                background:
-                  "linear-gradient(135deg,#8b5cf6,#6d28d9)",
-                color: "#fff",
-                borderRadius: "20px",
-                fontSize: "14px",
-                fontWeight: "500",
-              }}
-            >
-              {tag}
+        <div className="mb-4 flex flex-wrap gap-3">
 
-              <button
-                type="button"
-                onClick={() => removeTag(tag)}
-                style={{
-                  marginLeft: "8px",
-                  background: "transparent",
-                  color: "#fff",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: "16px",
-                }}
+          <AnimatePresence>
+
+            {value.map((tag) => (
+
+              <motion.div
+                key={tag}
+                initial={{ scale: .8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: .8, opacity: 0 }}
+                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-md"
               >
-                ×
-              </button>
-            </span>
-          ))}
+
+                {tag}
+
+                <button
+                  type="button"
+                  onClick={() => removeTag(tag)}
+                  className="rounded-full p-1 transition hover:bg-white/20"
+                >
+
+                  <X size={14} />
+
+                </button>
+
+              </motion.div>
+
+            ))}
+
+          </AnimatePresence>
+
         </div>
 
-        {/* Input */}
+        {/* Search Input */}
 
-        <input
-          type="text"
-          value={input}
-          placeholder={placeholder}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          style={{
-            width: "100%",
-            border: "none",
-            outline: "none",
-            background: "transparent",
-            color: "#fff",
-            fontSize: "15px",
-          }}
-        />
+        <div className="relative">
+
+          <Search
+            size={18}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+          />
+
+          <input
+            type="text"
+            value={input}
+            placeholder={placeholder}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="w-full rounded-xl border border-slate-700 bg-slate-900 py-3 pl-11 pr-4 text-white outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
+          />
+
+        </div>
+
       </div>
 
       {/* Suggestions */}
 
-      {input && filteredSuggestions.length > 0 && (
-        <div
-          style={{
-            marginTop: "8px",
-            borderRadius: "12px",
-            overflow: "hidden",
-            border: "1px solid rgba(255,255,255,0.1)",
-            background: "#1e1b4b",
-            boxShadow: "0 12px 25px rgba(0,0,0,.35)",
-            maxHeight: "220px",
-            overflowY: "auto",
-          }}
-        >
-          {filteredSuggestions.slice(0, 6).map((item) => (
-            <div
-              key={item}
-              onClick={() => addTag(item)}
-              style={{
-                padding: "12px 16px",
-                cursor: "pointer",
-                color: "#fff",
-                borderBottom:
-                  "1px solid rgba(255,255,255,.05)",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.background =
-                  "#7c3aed")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.background =
-                  "transparent")
-              }
-            >
-              {item}
-            </div>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+
+        {input && filteredSuggestions.length > 0 && (
+
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl"
+          >
+
+            {filteredSuggestions.slice(0, 6).map((item) => (
+
+              <button
+                key={item}
+                type="button"
+                onClick={() => addTag(item)}
+                className="flex w-full items-center justify-between border-b border-slate-800 px-5 py-3 text-left text-slate-200 transition last:border-none hover:bg-blue-600"
+              >
+
+                <span>{item}</span>
+
+                <Plus size={16} />
+
+              </button>
+
+            ))}
+
+          </motion.div>
+
+        )}
+
+      </AnimatePresence>
+
     </div>
   );
 };
