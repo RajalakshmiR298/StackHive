@@ -1,3 +1,4 @@
+const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -11,6 +12,10 @@ connectDB();
 
 // Middleware
 app.use(express.json());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 // Routes
 const favoriteRoutes = require("./routes/favoriteRoutes");
@@ -19,7 +24,7 @@ const eventRoutes = require("./routes/eventRoutes");
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/events", eventRoutes);
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(
