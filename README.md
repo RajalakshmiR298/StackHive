@@ -1,128 +1,114 @@
 # CampusConnect
 
-##  Overview
-
-CampusConnect is a MERN stack web application that helps students discover events that match their interests, skills, and hobbies while also connecting them with like-minded peers. The platform recommends nearby technical and non-technical events and allows users to build meaningful connections with other students.
-
----
-
-##  Features
-
-###  Personalized Event Recommendations
-
-* Discover nearby events based on your interests, hobbies, and skills.
-* Supports both technical and non-technical events.
-* View complete event details and registration links.
-
-###  Favorite Events
-
-* Save events you're interested in.
-* Access all your favorite events from one place.
-
-###  Connect with Like-minded Students
-
-* Find students with similar interests and skills.
-* Send and accept connection requests.
-
-###  Contact Connected Users
-
-* Once connected, users can view each other's email addresses.
-* Continue conversations through email or other external platforms.
+CampusConnect is a MERN stack web application designed to help college students discover events matching their interests, skills, and hobbies while making it easy to establish meaningful networks and professional connections with peers.
 
 ---
 
 ##  Tech Stack
 
 ### Frontend
-
-* React.js
-* HTML5
-* CSS3
-* JavaScript
+- **React.js** (initialized using Vite)
+- **React Router DOM** (declarative routing)
+- **Axios** (pre-configured HTTP client)
+- **Vanilla CSS** (custom modular dark/light design system)
 
 ### Backend
-
-* Node.js
-* Express.js
-
-### Database
-
-* MongoDB
-* Mongoose
-
-### Authentication
-
-* JWT (JSON Web Token)
-* bcrypt
+- **Node.js** & **Express**
+- **MongoDB** & **Mongoose** (ODM)
+- **JSON Web Tokens (JWT)** & **bcryptjs** (authentication)
+- **dotenv** (environment configurations)
 
 ---
 
-##  Project Structure
+##  Folder Structure
 
 ```
-CampusConnect
+CampusConnect/
+├── client/                     # React Frontend
+│   ├── public/                 # Static assets
+│   ├── src/
+│   │   ├── assets/             # Brand logos & icons
+│   │   ├── components/         # Common UI Components (Navbar, Footer, etc.)
+│   │   ├── pages/              # Routing views (Home, Login, Register, Profile, Events, Favorites, Connections)
+│   │   ├── layouts/            # Page layouts (MainLayout)
+│   │   ├── context/            # React Context API (AuthContext)
+│   │   ├── hooks/              # Custom React hooks (placeholder)
+│   │   ├── services/           # External service setups (api.js Axios client)
+│   │   ├── utils/              # Client side utilities
+│   │   ├── styles/             # Modular style files
+│   │   ├── App.jsx             # React routing setup
+│   │   ├── main.jsx            # Rendering entrypoint
+│   │   └── index.css           # Core styling tokens & systems
+│   ├── .env.example            # Environment variables setup for client
+│   └── package.json            # Client configurations & scripts
 │
-├── client/                 # React Frontend
+├── server/                     # Express Backend
+│   ├── config/                 # DB configuration (db.js)
+│   ├── controllers/            # Controller layers (auth, event, favorite, connection)
+│   ├── middleware/             # Authorization & error middlewares
+│   ├── models/                 # Mongoose schemas (User, Event, ConnectionRequest)
+│   ├── routes/                 # Express routing endpoints (auth, event, favorite, connection)
+│   ├── utils/                  # Core helpers (token generation, matching algorithm)
+│   ├── .env.example            # Environment variables setup for server
+│   ├── app.js                  # Main Express app registry
+│   ├── server.js               # Entrypoint & DB starter
+│   └── package.json            # Server configuration & dependencies
 │
-├── server/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   └── server.js
-│
-└── README.md
+├── .gitignore                  # Root level Git ignores
+├── package.json                # Optional root task runner
+└── README.md                   # Documentation guide
 ```
 
 ---
 
-##  Database Collections
+##  Installation Steps
 
-### Users
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   cd CampusConnect
+   ```
 
-* Name
-* Email
-* Password
-* Skills
-* Interests
-* Hobbies
-* Location
-* Favorite Events
-* Connections
+2. **Install all dependencies**:
+   Run the following command at the project root to install dependencies for the root concurrently package, client, and server:
+   ```bash
+   npm run install:all
+   ```
 
-### Events
-
-* Title
-* Description
-* Category
-* Tags
-* Venue
-* Date & Time
-* Registration Link
-* Location
-
-### Connection Requests
-
-* Sender ID
-* Receiver ID
-* Status (Pending / Accepted / Rejected)
+3. **Configure Environment Variables**:
+   - Create a `.env` file in the `server/` directory using `server/.env.example` as a template:
+     ```env
+     PORT=5000
+     MONGO_URI=your_mongodb_connection_uri
+     JWT_SECRET=your_jwt_secret_key
+     ```
+   - Create a `.env` file in the `client/` directory using `client/.env.example` as a template:
+     ```env
+     VITE_API_URL=http://localhost:5000/api
+     ```
 
 ---
 
-##  How It Works
+##  Running the Project
 
-1. User signs up and creates a profile.
-2. User selects interests, hobbies, and skills.
-3. The platform recommends nearby events matching the user's profile.
-4. Users can save events to Favorites.
-5. Users can discover students with similar interests.
-6. Users send and accept connection requests.
-7. After connecting, users can view each other's email addresses to communicate outside the platform.
+From the root project folder, you can run:
 
----
+- **Run both Backend & Frontend concurrently**:
+  ```bash
+  npm run dev
+  ```
 
-## 📄 License
+Alternatively, you can run them individually:
 
-This project is developed for academic purposes as a MERN Stack mini project.
+- **Run Backend only**:
+  ```bash
+  npm run dev:server
+  ```
+  *(Starts Server on `http://localhost:5000` via nodemon)*
+
+- **Run Frontend only**:
+  ```bash
+  npm run dev:client
+  ```
+  *(Starts Client on `http://localhost:5173` via Vite)*
+

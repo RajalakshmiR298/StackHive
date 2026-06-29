@@ -1,0 +1,35 @@
+/* Custom styles for App components */
+
+.event-card-link {
+  display: block;
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+}
+
+.event-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.event-card-image {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+}
+
+.events-controls {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.event-details-page {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

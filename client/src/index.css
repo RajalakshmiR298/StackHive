@@ -1,0 +1,79 @@
+
+@import "tailwindcss";
+
+/* ---------- Theme ---------- */
+@theme {
+  --color-primary: #2563eb;
+  --color-secondary: #7c3aed;
+  --color-accent: #06b6d4;
+
+  --color-bg: #0b1120;
+  --color-card: #111827;
+  --color-border: #1f2937;
+
+  --color-text: #f8fafc;
+  --color-muted: #94a3b8;
+
+  --font-sans: "Inter", sans-serif;
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(180deg, #0b1120 0%, #111827 100%);
+  color: #f8fafc;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ---------- Reusable ---------- */
+
+.container-custom {
+  width: min(1200px, 92%);
+  margin: auto;
+}
+
+.btn-primary {
+  @apply px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 transition text-white font-semibold shadow-lg;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 rounded-xl border border-slate-600 hover:bg-slate-800 transition text-white;
+}
+
+.glass-card {
+  @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl;
+}
+
+.section-title {
+  @apply text-4xl font-bold;
+}
+
+.section-subtitle {
+  @apply text-slate-400 mt-3;
+}
+
