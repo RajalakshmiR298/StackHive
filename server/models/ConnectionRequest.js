@@ -1,24 +1,31 @@
-const mongoose = require('mongoose');
-
-/*
-ConnectionRequest Schema definition will include:
-- sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
-- receiver: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
-- status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' }
-*/
+const mongoose = require("mongoose");
 
 const connectionRequestSchema = new mongoose.Schema(
   {
-    // Schema properties will be defined here
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    receiver: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    status: {
+      type: String,
+      enum: ["pending", "accepted", "rejected"],
+      default: "pending",
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const ConnectionRequest = mongoose.model(
-  'ConnectionRequest',
+module.exports = mongoose.model(
+  "ConnectionRequest",
   connectionRequestSchema
 );
-
-module.exports = ConnectionRequest;
