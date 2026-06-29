@@ -1,8 +1,12 @@
+const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+
 dotenv.config();
 
-const express = require("express");
+// Optional: remove this after confirming everything works
+console.log("MONGO_URI:", process.env.MONGO_URI);
+
 const app = express();
 
 const connectDB = require("./config/db");
@@ -11,18 +15,21 @@ const connectDB = require("./config/db");
 connectDB();
 
 // Middleware
-app.use(express.json());
 app.use(cors({
   origin: "http://localhost:5173",
-  credentials: true
+  credentials: true,
 }));
+
+app.use(express.json());
 
 // Routes
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const eventRoutes = require("./routes/eventRoutes");
+const connectionRoutes = require("./routes/connectionRoutes");
 
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/connections", connectionRoutes);
 
 const PORT = process.env.PORT || 5000;
 

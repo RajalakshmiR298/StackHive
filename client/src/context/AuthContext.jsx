@@ -26,14 +26,14 @@ export const AuthProvider = ({ children }) => {
       password,
     });
 
-    const data = response.data;
+    const userData = response.data;
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data));
+    localStorage.setItem("token", userData.token);
+    localStorage.setItem("user", JSON.stringify(userData));
 
-    setUser(data);
+    setUser(userData);
 
-    return data;
+    return userData;
   };
 
   // Login
@@ -43,21 +43,20 @@ export const AuthProvider = ({ children }) => {
       password,
     });
 
-    const data = response.data;
+    const userData = response.data;
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data));
+    localStorage.setItem("token", userData.token);
+    localStorage.setItem("user", JSON.stringify(userData));
 
-    setUser(data);
+    setUser(userData);
 
-    return data;
+    return userData;
   };
 
   // Logout
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     setUser(null);
   };
 
